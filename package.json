@@ -1,0 +1,36 @@
+{
+  "name": "rwi-chat",
+  "version": "0.0.1-10",
+  "description": "txrob779 stee",
+  "main": "app.js",
+  "author": "David Higginbotham <david@hillsoft.com>",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "hapi": "*",
+    "yar": "*",
+    "boom": ">= 0.3.6",
+    "handlebars": "*",
+    "mongodb": "*",
+    "mongoskin": "*",
+    "less": "*",
+    "socket.io": "*",
+    "lessy": "*",
+    "iron": "*",
+    "hoek": "*",
+    "colors": "*",
+    "lout": "*"
+  },
+  "devDependencies": {
+    "utest": "*",
+    "urun": "*",
+    "underscore": "*"
+  },
+  "subdomain": "rwi-chat",
+  "engines": {
+    "node": "0.8.x"
+  }
+}
