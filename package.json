@@ -21,6 +21,8 @@
     "lessy": "*",
     "iron": "*",
     "hoek": "*",
+    "crypto": "*",
+    "hawk": "*",
     "colors": "*",
     "lout": "*"
   },

@@ -16,6 +16,7 @@ var DefaultRoutes = require('./routes/default.routes.js');
 
 http.route([
   { method: 'GET', path: '/', handler: DefaultRoutes.HomePage },
+  { method: 'GET', path: '/signup', handler: DefaultRoutes.SignupPage },
 ]);
 
 http.plugin.require('lout', null, function () {

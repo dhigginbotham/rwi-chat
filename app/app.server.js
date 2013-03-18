@@ -3,12 +3,8 @@ var Hapi = require('hapi')
   , socketIO = require('socket.io')
   , options = require('./app.options');
 
-var http = exports.http = new Hapi.Server(/*'localhost', 3000,*/ options);
+var http = exports.http = new Hapi.Server('localhost', 3000, options);
 var io = exports.io = socketIO.listen(http.listener);
-
-// io.configure('development', function(){
-//   io.set('transports', ['xhr-polling']);
-// });
 
 // usernames which are currently connected to the chat
 var usernames = exports.usernames = {};

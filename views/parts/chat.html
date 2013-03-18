@@ -1,0 +1,67 @@
+<script>
+
+  var socket = io.connect();
+
+  // on connection to server, ask for user's name with an anonymous callback
+  socket.on('connect', function(){
+    // call the server-side function 'adduser' and send one parameter (value of prompt)
+    socket.emit('adduser', prompt("What's your name?"));
+  });
+
+  // listener, whenever the server emits 'updatechat', this updates the chat body
+  socket.on('updatechat', function (username, data) {
+      $('#conversation').prepend('<b style="color: #0044cc;">'+username + ':</b> ' + data + '<br>');
+  });
+
+  // listener, whenever the server emits 'updateusers', this updates the username list
+  socket.on('updateusers', function(data) {
+    $('#users').empty();
+    $.each(data, function(key, value) {
+      $('#users').append('<p>' + key + '</p>');
+    });
+  });
+
+  // on load of page
+  $(function(){
+    // when the client clicks SEND
+    $('#datasend').click( function() {
+      var message = $('#data').val();
+      $('#data').val('');
+      $('#data').select();
+      // tell server to execute 'sendchat' and send along one parameter
+      socket.emit('sendchat', message);
+    });
+
+    // when the client hits ENTER on their keyboard
+    $('#data').keypress(function(e) {
+      if(e.which == 13) {
+        $(this).blur();
+        $('#datasend').focus().click();
+      }
+    });
+  });
+
+
+</script>
+
+    <div class="row">
+      <div class="span2">
+        <div class="well" style="height: 300px;">
+          
+          <b>Current Users</b>
+          <div id="users"></div>
+        </div>
+      </div>
+      <div class="span10">
+        <div id="conversation" style="overflow-y: auto; height: 300px; word-break: break-all;"></div>
+      </div>
+    </div> <!-- #row -->
+
+      <div class="row">
+        <div class="span10">
+          <input type="text" id="data" class="input span10" />
+        </div>
+        <div class="span2">
+          <input class="btn btn-primary btn-block" type="button" id="datasend" value="send" />
+        </div>
+      </div> <!-- #row -->

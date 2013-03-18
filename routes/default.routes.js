@@ -14,3 +14,18 @@ exports.HomePage = function (request) {
     console.log('connected');      
   });
 }
+
+exports.SignupPage = function (request) {
+  request.reply.view('pages/signup', {
+    title: 'The Unofficial RWI Chat(beta) '
+  , form: require('../conf/forms.conf').signup
+  }).send();
+
+  io.sockets.on('connection', function (socket) {
+    console.log('connected');
+
+    socket.on('signup_form', function(data) {
+      console.log(data);
+    })    
+  });
+}
