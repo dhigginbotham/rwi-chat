@@ -2,6 +2,28 @@
 
   var socket = io.connect();
 
+
+  function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
+
+  function replaceURLWithHTMLLinks(text) {
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return text.replace(exp,"<a href='$1' target='_blank'>$1</a>"); 
+  }
+
+  socket.on('connected_users', function(data) {
+    console.log(data);
+  });
+
   // on connection to server, ask for user's name with an anonymous callback
   socket.on('connect', function(){
     // call the server-side function 'adduser' and send one parameter (value of prompt)
@@ -10,7 +32,9 @@
 
   // listener, whenever the server emits 'updatechat', this updates the chat body
   socket.on('updatechat', function (username, data) {
-      $('#conversation').prepend('<b style="color: #0044cc;">'+username + ':</b> ' + data + '<br>');
+    var date = new Date();
+    var urls = replaceURLWithHTMLLinks(data);
+      $('#conversation').prepend('[' + formatAMPM(date) + '] <b style="color: #0044cc;">'+username + ':</b> ' + urls + '<br>');
   });
 
   // listener, whenever the server emits 'updateusers', this updates the username list
