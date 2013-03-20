@@ -1,0 +1,40 @@
+<div class="container">
+  <form class="form-signin" id="login-form">
+    <h2 class="form-signin-heading">{{#with form.string}}{{0.std}}{{/with}}</h2>
+    {{#each form.text}}
+      <input type="text" class="input input-block-level" name="{{name}}" placeholder="{{std}}" {{#if ctx}}value="{{ctx}}"{{/if}} />
+    {{/each}}
+    <button class="btn btn-large btn-primary" type="submit" id="login">Sign in</button>
+    <button class="btn btn-large btn-success pull-right" type="submit" id="register">Register</button>
+  </form>
+</div>
+<script type="text/javascript">
+
+  var SignUpClass = (function() {
+    var socket = io.connect();
+    var s;
+
+      return {
+        settings: {
+          form: $('#login-form')
+          , reg: $('#register')
+          , login: $('#login')
+        },
+        init: function() {
+          s = this.settings;
+          SignUpClass.bind();
+          HelperClass.DisableForm('#login-form');
+        },
+        bind: function() {
+          s.reg.bind('click', function() {
+            console.log('clicked');
+            socket.emit('register', s.form.serializeArray());
+          });
+        }
+      }
+  })();
+
+  $(document).ready(function() {
+    SignUpClass.init();
+  });
+</script>

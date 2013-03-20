@@ -31,15 +31,14 @@ exports.HomePage = function (request) {
   });
 }
 
-exports.SignupPage = function (request) {
+exports.LoginPage = function (request) {
 
   ScriptManager.ManageScriptLoader(request, 'css', function(css) {
 
     ScriptManager.ManageScriptLoader(request, 'js', function(js) {
 
       FormsClass.makeForm(FormsConf.signup, function(formOutput) {
-        console.log(formOutput);
-        request.reply.view('pages/signup', {
+        request.reply.view('pages/login', {
           title: 'The Unofficial RWI Chat(beta) '
         , form: formOutput
         , embed: js
@@ -49,13 +48,22 @@ exports.SignupPage = function (request) {
 
       io.sockets.on('connection', function (socket) {
 
+        socket.on('register', function (data) {
+          FormsClass.formatForm(FormsConf.signup, data, function(form) {
+            console.log(form);
+          });
+        });
       });
 
     });
   });
+
 }
 
 exports.ChatPage = function (request) {
+// usernames which are currently connected to the chat
+var usernames = {};
+var count = usernames.length;
 
   ScriptManager.ManageScriptLoader(request, 'css', function(css) {
 

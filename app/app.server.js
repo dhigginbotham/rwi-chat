@@ -6,9 +6,9 @@ var Hapi = require('hapi')
 var http = exports.http = new Hapi.Server('localhost', 3000, options);
 var io = exports.io = socketIO.listen(http.listener);
 
-// usernames which are currently connected to the chat
-var usernames = exports.usernames = {};
-var count = usernames.length;
+io.sockets.on('connection', function (socket) {
+  console.log('connected');
+});
 
 // io.sockets.on('connection', function (socket) {
 
