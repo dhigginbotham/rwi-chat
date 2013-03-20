@@ -1,0 +1,6 @@
+<!-- //footer-scripts.html -->
+{{#if style.foot}}{{#each style.foot}}
+    <link href="{{{path}}}" rel="stylesheet"><!-- ^- {{name}} -->
+{{/each}}{{/if}}{{#if embed.foot}}{{#each embed.foot}}
+    <script src="{{{path}}}"></script><!-- ^- {{name}} -->
+{{/each}}{{/if}}

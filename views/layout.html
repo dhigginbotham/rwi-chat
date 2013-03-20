@@ -3,15 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>{{title}}</title>
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    {{>header-scripts}}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
   </head>
   <body>
     {{{ content }}}    
   </body>
+  {{>footer-scripts}}
 </html>

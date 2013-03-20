@@ -9,82 +9,93 @@ var io = require('../app/app.server').io;
 var FormsClass = require('../lib/forms.lib').FormsClass;
 var FormsConf = require('../conf/forms.conf').forms;
 
-exports.HomePage = function (request) {
-  request.reply.view('pages/index', {
-    title: 'RWI Chat '
-  }).send();
+var ScriptManager = require('../conf/scripts.conf');
 
-  io.sockets.on('connection', function (socket) {
-    console.log('connected');      
+exports.HomePage = function (request) {
+
+  ScriptManager.ManageScriptLoader(request, 'css', function(css) {
+
+    ScriptManager.ManageScriptLoader(request, 'js', function(js) {
+
+      request.reply.view('pages/index', {
+        title: 'RWI Chat '
+      , embed: js
+      , style: css
+      }).send();
+
+      io.sockets.on('connection', function (socket) {
+        console.log('connected');      
+      });
+
+    });
   });
 }
 
 exports.SignupPage = function (request) {
 
-  FormsClass.makeForm(FormsConf.signup, function(formOutput) {
-    console.log(formOutput);
-    request.reply.view('pages/signup', {
-      title: 'The Unofficial RWI Chat(beta) '
-    , form: formOutput
-    }).send();
-  });
+  ScriptManager.ManageScriptLoader(request, 'css', function(css) {
 
-  io.sockets.on('connection', function (socket) {
+    ScriptManager.ManageScriptLoader(request, 'js', function(js) {
 
-    // socket.on('signup_form', function(data) {
-    //   FormsClass.formatForm(FormsConf.signup, data, function(err, resp) {
-    //     return (err) ? console.log(err) : console.log(resp);
-    //   });
-    // });
+      FormsClass.makeForm(FormsConf.signup, function(formOutput) {
+        console.log(formOutput);
+        request.reply.view('pages/signup', {
+          title: 'The Unofficial RWI Chat(beta) '
+        , form: formOutput
+        , embed: js
+        , style: css
+        }).send();
+      });
+
+      io.sockets.on('connection', function (socket) {
+
+      });
+
+    });
   });
 }
 
 exports.ChatPage = function (request) {
-  request.reply.view('pages/chat', {
-    title: 'The Unofficial RWI Chat(beta) '
-  }).send();
-  
-  io.sockets.on('connection', function (socket) {
 
-    // when the client emits 'sendchat', this listens and executes
-    socket.on('sendchat', function (data) {
-      // we tell the client to execute 'updatechat' with 2 parameters
-      if(data.length > 1) {
+  ScriptManager.ManageScriptLoader(request, 'css', function(css) {
 
-        io.sockets.emit('updatechat', socket.username, data);
-      }
-      if(data === '/users') {
-        io.sockets.emit('connected_users', usernames);
-      }
+    ScriptManager.ManageScriptLoader(request, 'js', function(js) {
+
+      request.reply.view('pages/chat', {
+        title: 'The Unofficial RWI Chat(beta) '
+        , embed: js
+        , style: css
+      }).send();
+      
+      io.sockets.on('connection', function (socket) {
+
+        socket.on('sendchat', function (data) {
+
+          if(data.length > 1) {
+
+            io.sockets.emit('updatechat', socket.username, data);
+          }
+          if(data === '/users') {
+            io.sockets.emit('connected_users', usernames);
+          }
+        });
+
+        socket.on('adduser', function(username){
+
+          if (username === usernames[username] || !username) {
+            username = 'guest';
+          }
+          socket.username = username;
+          usernames[username] = username;
+          io.sockets.emit('updateusers', usernames);
+        });
+
+        socket.on('disconnect', function(){
+          delete usernames[socket.username];
+          io.sockets.emit('updateusers', usernames);
+        }); 
+      });
+
     });
-
-    // when the client emits 'adduser', this listens and executes
-    socket.on('adduser', function(username){
-      // we store the username in the socket session for this client
-      console.log(usernames);
-      if (username === usernames[username] || !username) {
-        username = 'guest';
-      }
-      socket.username = username;
-      // add the client's username to the global list
-      usernames[username] = username;
-      // echo to client they've connected
-      // socket.emit('updatechat', 'SERVER', 'you have connected');
-      // echo globally (all clients) that a person has connected
-      // socket.broadcast.emit('updatechat', 'SERVER', username + ' has connected');
-      // update the list of users in chat, client-side
-      io.sockets.emit('updateusers', usernames);
-    });
-
-    // when the user disconnects.. perform this
-    socket.on('disconnect', function(){
-      // remove the username from global usernames list
-      delete usernames[socket.username];
-      // update list of users in chat, client-side
-      io.sockets.emit('updateusers', usernames);
-      // echo globally that this client has left
-      // socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
-    }); 
   });
-
 }
