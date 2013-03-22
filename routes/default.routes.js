@@ -5,16 +5,16 @@ var Hapi = require('hapi')
 //include socket.io
 var io = require('../app/app.server').io;
 
-
 var FormsClass = require('../lib/forms.lib').FormsClass;
 var FormsConf = require('../conf/forms.conf').forms;
 
 var ScriptManager = require('../conf/scripts.conf');
 
+exports.Forwarder = function (request) {
+    request.reply.redirect('/a/chat').send();
+}
+
 exports.HomePage = function (request) {
-// usernames which are currently connected to the chat
-var usernames = {};
-var count = usernames.length;
 
   ScriptManager.ManageScriptLoader(request, 'css', function(css) {
 
@@ -25,35 +25,6 @@ var count = usernames.length;
       , embed: js
       , style: css
       }).send();
-
-      io.sockets.on('connection', function (socket) {
-
-        socket.on('sendchat', function (data) {
-
-          if(data.length > 1) {
-
-            io.sockets.emit('updatechat', socket.username, data);
-          }
-          if(data === '/users') {
-            io.sockets.emit('connected_users', usernames);
-          }
-        });
-
-        socket.on('adduser', function(username){
-
-          if (username === usernames[username] || !username) {
-            username = 'guest';
-          }
-          socket.username = username;
-          usernames[username] = username;
-          io.sockets.emit('updateusers', usernames);
-        });
-
-        socket.on('disconnect', function(){
-          delete usernames[socket.username];
-          io.sockets.emit('updateusers', usernames);
-        }); 
-      });
 
     });
   });
@@ -89,48 +60,16 @@ exports.LoginPage = function (request) {
 }
 
 exports.ChatPage = function (request) {
-// usernames which are currently connected to the chat
-var usernames = {};
-var count = usernames.length;
 
   ScriptManager.ManageScriptLoader(request, 'css', function(css) {
 
     ScriptManager.ManageScriptLoader(request, 'js', function(js) {
 
-      request.reply.view('pages/chat', {
+      request.reply.view('pages/index', {
         title: 'The Unofficial RWI Chat(beta) '
         , embed: js
         , style: css
       }).send();
-      
-      io.sockets.on('connection', function (socket) {
-
-        socket.on('sendchat', function (data) {
-
-          if(data.length > 1) {
-
-            io.sockets.emit('updatechat', socket.username, data);
-          }
-          if(data === '/users') {
-            io.sockets.emit('connected_users', usernames);
-          }
-        });
-
-        socket.on('adduser', function(username){
-
-          if (username === usernames[username] || !username) {
-            username = 'guest';
-          }
-          socket.username = username;
-          usernames[username] = username;
-          io.sockets.emit('updateusers', usernames);
-        });
-
-        socket.on('disconnect', function(){
-          delete usernames[socket.username];
-          io.sockets.emit('updateusers', usernames);
-        }); 
-      });
 
     });
   });
