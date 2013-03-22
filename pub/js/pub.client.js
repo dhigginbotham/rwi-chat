@@ -1,4 +1,4 @@
-  var pub = io.connect('http://localhost:3000/pub');
+  var pub = io.connect('/pub');
 
   function formatAMPM(date) {
     var hours = date.getHours();

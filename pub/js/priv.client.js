@@ -1,4 +1,4 @@
-  var priv = io.connect('http://localhost:3000/priv');
+  var priv = io.connect('/priv');
 
   function formatAMPM(date) {
     var hours = date.getHours();
