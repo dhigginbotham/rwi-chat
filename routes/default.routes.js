@@ -22,7 +22,7 @@ exports.HomePage = function (request) {
     ScriptManager.ManageScriptLoader(request, 'js', function(js) {
 
       request.reply.view('pages/index', {
-        title: 'RWI Chat '
+        title: 'The Unofficial RWI Chat(beta) '
       , embed: js
       , style: css
       }).send();
@@ -67,7 +67,7 @@ exports.ChatPage = function (request) {
     ScriptManager.ManageScriptLoader(request, 'js', function(js) {
 
       request.reply.view('pages/index', {
-        title: 'The Unofficial RWI Chat(beta) '
+        title: 'The Official Secret Society Chat '
         , embed: js
         , style: css
       }).send();
