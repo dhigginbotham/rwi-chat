@@ -6,7 +6,7 @@ var ScriptsClass = (function() {
     settings: {
 
     },
-    init: {
+    init: function() {
       s = this.settings;
     },
     formatAMPM: function (date) {

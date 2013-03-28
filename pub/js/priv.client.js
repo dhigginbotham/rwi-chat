@@ -1,4 +1,4 @@
-  var priv = io.connect('/priv');
+var priv = io.connect('http://rwi-chat.jit.su/priv');
 
   priv.on('connected_users', function(data) {
     console.log(data);

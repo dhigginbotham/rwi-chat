@@ -3,12 +3,9 @@ var Hapi = require('hapi')
   , socketIO = require('socket.io')
   , options = require('./app.options');
 
-var http = exports.http = new Hapi.Server(/*'localhost', 3000, */options);
+var http = exports.http = new Hapi.Server(/*'localhost', 3005, */options);
 var io = exports.io = socketIO.listen(http.listener);
 
-// io.sockets.on('connection', function (socket) {
-//   console.log('connected');
-// });
 // usernames which are currently connected to the chat
 var usernames = {};
 var pUsernames = {};
@@ -22,10 +19,7 @@ var priv = io
       // we tell the client to execute 'updatechat' with 2 parameters
       if(data.length > 1) {
 
-        socket.emit('updatechat', socket.username, data);
-      }
-      if(data === '/users') {
-        socket.emit('connected_users', pUsernames);
+        priv.emit('updatechat', socket.username, data);
       }
     })
 
@@ -44,7 +38,7 @@ var priv = io
       // echo globally (all clients) that a person has connected
       // socket.broadcast.emit('updatechat', 'SERVER', username + ' has connected');
       // update the list of users in chat, client-side
-      socket.emit('updateusers', pUsernames);
+      priv.emit('updateusers', pUsernames);
     })
 
     // when the user disconnects.. perform this
@@ -52,13 +46,13 @@ var priv = io
       // remove the username from global pUsernames list
       delete pUsernames[socket.username];
       // update list of users in chat, client-side
-      socket.emit('updateusers', pUsernames);
+      priv.emit('updateusers', pUsernames);
       // echo globally that this client has left
       // socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
     })
 });
 
-var priv = io
+var pub = io
   .of('/pub')
   .on('connection', function (socket) {
 
@@ -67,10 +61,7 @@ var priv = io
       // we tell the client to execute 'updatechat' with 2 parameters
       if(data.length > 1) {
 
-        socket.emit('updatechat', socket.username, data);
-      }
-      if(data === '/users') {
-        socket.emit('connected_users', usernames);
+        pub.emit('updatechat', socket.username, data);
       }
     })
 
@@ -89,7 +80,7 @@ var priv = io
       // echo globally (all clients) that a person has connected
       // socket.broadcast.emit('updatechat', 'SERVER', username + ' has connected');
       // update the list of users in chat, client-side
-      socket.emit('updateusers', usernames);
+      pub.emit('updateusers', usernames);
     })
 
     // when the user disconnects.. perform this
@@ -97,7 +88,7 @@ var priv = io
       // remove the username from global usernames list
       delete usernames[socket.username];
       // update list of users in chat, client-side
-      socket.emit('updateusers', usernames);
+      pub.emit('updateusers', usernames);
       // echo globally that this client has left
       // socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
     })
