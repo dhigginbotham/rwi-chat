@@ -17,7 +17,7 @@ var priv = io
     // when the client emits 'sendchat', this listens and executes
     socket.on('sendchat', function (data) {
       // we tell the client to execute 'updatechat' with 2 parameters
-      if(data.length > 1) {
+      if(data.length > 1 && data.length < 600) {
 
         priv.emit('updatechat', socket.username, data);
       }
@@ -59,7 +59,7 @@ var pub = io
     // when the client emits 'sendchat', this listens and executes
     socket.on('sendchat', function (data) {
       // we tell the client to execute 'updatechat' with 2 parameters
-      if(data.length > 1) {
+      if(data.length > 1 && data.length < 600) {
 
         pub.emit('updatechat', socket.username, data);
       }

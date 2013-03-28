@@ -11,6 +11,7 @@ var FormsConf = require('../conf/forms.conf').forms;
 var ScriptManager = require('../conf/scripts.conf');
 
 exports.Forwarder = function (request) {
+    // return request.reply.redirect('http://localhost:3005/a/chat').send();
     return request.reply.redirect('http://rwi-chat.jit.su/a/chat').send();
 }
 

@@ -1,4 +1,4 @@
-var priv = io.connect('http://rwi-chat.jit.su/priv');
+var priv = io.connect('/priv');
 
   priv.on('connected_users', function(data) {
     console.log(data);
@@ -14,7 +14,7 @@ var priv = io.connect('http://rwi-chat.jit.su/priv');
   priv.on('updatechat', function (username, data) {
     var date = new Date();
     var urls = ScriptsClass.replaceURLWithHTMLLinks(data);
-      $('#conversation').prepend('[' + ScriptsClass.formatAMPM(date) + '] <b style="color: #0044cc;">'+username + ':</b> ' + urls + '<br>');
+      $('#conversation').prepend('[' + ScriptsClass.formatAMPM(date) + '] <b style="color: #0044cc;">'+username + ':</b> ' + urls + '<hr class="hr hr-small" />');
   });
 
   // listener, whenever the server emits 'updateusers', this updates the username list
