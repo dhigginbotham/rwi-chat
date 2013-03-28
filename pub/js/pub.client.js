@@ -1,4 +1,4 @@
-  var pub = io.connect('/pub');
+  var pub = io.connect('http://rwi-chat.jit.su/pub');
 
   pub.on('connected_users', function(data) {
     console.log(data);
