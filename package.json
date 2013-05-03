@@ -1,6 +1,6 @@
 {
   "name": "rwi-chat",
-  "version": "0.1.6",
+  "version": "0.2.0-1",
   "description": "easy like sunday morning",
   "main": "app.js",
   "author": "David Higginbotham <david@hillsoft.com>",

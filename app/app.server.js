@@ -3,7 +3,7 @@ var Hapi = require('hapi')
   , socketIO = require('socket.io')
   , options = require('./app.options');
 
-var http = exports.http = new Hapi.Server(/*'localhost', 3005, */options);
+var http = exports.http = new Hapi.Server(/*'localhost', 3005,*/ options);
 var io = exports.io = socketIO.listen(http.listener);
 
 io.configure('production', function(){
@@ -17,15 +17,15 @@ io.configure('production', function(){
   // default port)
   io.set('transports', [
       'websocket'
-    , 'flashsocket'
-    , 'htmlfile'
-    , 'xhr-polling'
+    // , 'flashsocket'
+    // , 'htmlfile'
+    // , 'xhr-polling'
     , 'jsonp-polling'
   ]);
 });
 
 io.configure('development', function(){
-  io.set('transports', ['websocket']);
+  io.set('transports', ['jsonp-polling']);
 });
 
 // usernames which are currently connected to the chat

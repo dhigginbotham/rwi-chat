@@ -6,7 +6,7 @@ var fs = require('fs')
 
 module.exports = {
   host: 'http://rwi-chat.jit.su/',
-  port: 8080,
+  port: 3131,
   views: {
     path: path.join(__dirname, '../', 'views'),
     engine: {
